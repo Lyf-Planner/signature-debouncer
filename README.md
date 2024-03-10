@@ -109,7 +109,8 @@ SignatureDebouncer.run(() => updateItemDate(someDate), { id: '1234' }, 5000);
 SignatureDebouncer.run(() => updateItemTitle(anotherTitle), { id: '1234' }, 5000);
 SignatureDebouncer.run(() => updateItemDate(anotherDate), { id: '1234' }, 5000);
 
-// After 5000ms uninterrupted seconds, the console would show "Updated date!" - the last invocation under that signature
+// After 5000ms uninterrupted seconds, the console would show "Updated date!"
+// This is because the date update was the last invocation under that signature :)
 ```
 
 The `SignatureDebouncer` debounces any function call it wraps, globally, purely based on the signature. 
