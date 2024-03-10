@@ -1,6 +1,6 @@
 # signature-debouncer
 
-> A global singleton which debounces function invocations on the basis of a custom data signature</p>
+> Debounces function invocations globally on the basis of a custom data signature
 
 <p>
   <a href="https://www.npmjs.com/package/signature-debouncer"><img src="https://img.shields.io/npm/v/signature-debouncer/latest.svg?style=flat-square" alt="NPM version" /> </a>
@@ -30,8 +30,6 @@ Note: `signature` equality is tested via JSON stringification
 +
 The `SignatureDebouncer` (imported as `debouncer`) can be used anywhere in your project to globally debounce a function based on some arbitrary signature. 
 
-The `signature` can be any object, but good examples include the function's parameters, the function name - anything you possibly may want to use to differentiate what function calls are to be debounced independently.
-
 **Basic Usage:**
 
 ```
@@ -51,6 +49,8 @@ console.log(someData)
 ```
 
 **Using the Signature:**
+
+The `signature` can be any object, but good examples include the function's parameters, the function name - anything you possibly may want to use to differentiate what function calls are to be debounced independently.
 
 If I wanted a function to only debounce based on a custom signature, for example, that signature could be an object containing it's `name` and `arg`, I could do the following:
 
@@ -109,7 +109,8 @@ debouncer.run(() => updateItemDate(someDate), { id: '1234' }, 5000);
 debouncer.run(() => updateItemTitle(anotherTitle), { id: '1234' }, 5000);
 debouncer.run(() => updateItemDate(anotherDate), { id: '1234' }, 5000);
 
-// After 5000ms uninterrupted seconds, the console would show "Updated date!" - the last invocation under that signature
+// After 5000ms uninterrupted seconds, the console would show "Updated date!"
+// This is because the date update was the last invocation under that signature :)
 ```
 
 The `debouncer` debounces any function call it wraps, globally, purely based on the signature. 
