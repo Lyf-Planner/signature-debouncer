@@ -10,9 +10,11 @@
 
 ## Installation
 
-`npm install signature-debouncer`
+```npm install signature-debouncer```
+
 or
-`yarn add signature-debouncer`
+
+```yarn add signature-debouncer```
 
 ## API
 
@@ -57,9 +59,9 @@ const updateItemDate = (date) => console.log("Updated date!");
 
 // These calls can come from anywhere in the project...
 SignatureDebouncer.run(() => updateItemTitle(someTitle), { id: '1234' }, 5000); // User A updates at 30ms
-SignatureDebouncer.run(() => updateItemTitle(anotherTitle), { id: '1234' }, 5000); // User B updates at 500ms
+SignatureDebouncer.run(() => updateItemDate(someDate), { id: '1234' }, 5000); // User B updates at 500ms
 SignatureDebouncer.run(() => updateItemTitle(anotherTitle), { id: '1234' }, 5000); // User A updates at 2000ms
-SignatureDebouncer.run(() => updateItemTitle(anotherTitle), { id: '1234' }, 5000); // User B updates at 5000ms
+SignatureDebouncer.run(() => updateItemDate(anotherDate), { id: '1234' }, 5000); // User B updates at 5000ms
 
 // After 5000ms uninterrupted seconds, the console would show "Updated date!"
 ```
