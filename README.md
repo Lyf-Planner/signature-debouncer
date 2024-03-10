@@ -18,7 +18,7 @@
 
 ## API
 
-`SignatureDebouncer.run(func: () => any, signature: Object = {}, duration: number = 1000)`
+`debouncer.run(func: () => any, signature: Object = {}, duration: number = 1000)`
 
 Will run `func` after `duration`, unless any calls to `run` with the same `signature` are also made inside this time.
 
