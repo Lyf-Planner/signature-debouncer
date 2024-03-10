@@ -1,8 +1,8 @@
-declare class Debouncer {
+declare class SignatureDebouncer {
     private uniqueRuns;
     run(func: () => any, signature?: Object, duration?: number): void;
     private cleanupRun;
     private encodeSignature;
 }
-declare const SignatureDebouncer: Debouncer;
-export default SignatureDebouncer;
+declare const debouncer: SignatureDebouncer;
+export default debouncer;

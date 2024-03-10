@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class Debouncer {
+class SignatureDebouncer {
     constructor() {
         this.uniqueRuns = {};
     }
@@ -27,5 +27,5 @@ class Debouncer {
         return JSON.stringify(signature);
     }
 }
-const SignatureDebouncer = new Debouncer();
-exports.default = SignatureDebouncer;
+const debouncer = new SignatureDebouncer();
+exports.default = debouncer;

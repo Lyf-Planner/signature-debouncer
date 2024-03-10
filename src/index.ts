@@ -1,4 +1,4 @@
-class Debouncer {
+class SignatureDebouncer {
   private uniqueRuns: Record<string, NodeJS.Timeout> = {};
 
   public run(func: () => any, signature: Object = {}, duration = 1000) {
@@ -29,6 +29,6 @@ class Debouncer {
   }
 }
 
-const SignatureDebouncer = new Debouncer();
+const debouncer = new SignatureDebouncer();
 
-export default SignatureDebouncer;
+export default debouncer;

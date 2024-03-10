@@ -27,20 +27,20 @@ If the duration has not timed out, and another call with the same `signature` is
 Note: `signature` equality is tested via JSON stringification
 
 ## Usage
-
-The `SignatureDebouncer` can be used anywhere in your project to globally debounce a function based on some arbitrary signature. 
++
+The `SignatureDebouncer` (imported as `debouncer`) can be used anywhere in your project to globally debounce a function based on some arbitrary signature. 
 
 The `signature` can be any object, but good examples include the function's parameters, the function name - anything you possibly may want to use to differentiate what function calls are to be debounced independently.
 
 **Basic Usage:**
 
 ```
-import SignatureDebouncer from 'signature-debouncer';
+import debouncer from 'signature-debouncer';
 
 const someData = [1, 2, 3, 4];
 function examplePushFunction = () => someData.push(data);
 
-SignatureDebouncer.run(() => examplePushFunction(5));
+debouncer.run(() => examplePushFunction(5));
 
 // After 1000ms
 
@@ -60,7 +60,7 @@ someData = [1,2,3,4];
 const arg = 5;
 const signature = { funcName: exampleFunction.name, arg }
 
-SignatureDebouncer.run(() => exampleFunction(arg), signature);
+debouncer.run(() => exampleFunction(arg), signature);
 
 // After 1000ms
 
@@ -80,8 +80,8 @@ const signature = { funcName: exampleFunction.name, arg }
 const anotherArg = 6;
 const anotherSignature = { funcName: exampleFunction.name, anotherArg };
 
-SignatureDebouncer.run(() => exampleFunction(arg), signature);
-SignatureDebouncer.run(() => exampleFunction(anotherArg), anotherSignature);
+debouncer.run(() => exampleFunction(arg), signature);
+debouncer.run(() => exampleFunction(anotherArg), anotherSignature);
 
 // After 1000ms
 
@@ -104,15 +104,15 @@ const updateItemDate = (date) => {
 }
 
 // These calls could come from anywhere in the project...
-SignatureDebouncer.run(() => updateItemTitle(someTitle), { id: '1234' }, 5000);
-SignatureDebouncer.run(() => updateItemDate(someDate), { id: '1234' }, 5000);
-SignatureDebouncer.run(() => updateItemTitle(anotherTitle), { id: '1234' }, 5000);
-SignatureDebouncer.run(() => updateItemDate(anotherDate), { id: '1234' }, 5000);
+debouncer.run(() => updateItemTitle(someTitle), { id: '1234' }, 5000);
+debouncer.run(() => updateItemDate(someDate), { id: '1234' }, 5000);
+debouncer.run(() => updateItemTitle(anotherTitle), { id: '1234' }, 5000);
+debouncer.run(() => updateItemDate(anotherDate), { id: '1234' }, 5000);
 
 // After 5000ms uninterrupted seconds, the console would show "Updated date!" - the last invocation under that signature
 ```
 
-The `SignatureDebouncer` debounces any function call it wraps, globally, purely based on the signature. 
+The `debouncer` debounces any function call it wraps, globally, purely based on the signature. 
 
 The point is to extract messy debouncer management when you do want the debouncing condition to be a bit more arbitrary or independent of the place or time a function is called.
 
