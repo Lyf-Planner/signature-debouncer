@@ -27,7 +27,7 @@ If the duration has not timed out, and another call with the same `signature` is
 Note: `signature` equality is tested via JSON stringification
 
 ## Usage
-+
+
 The `SignatureDebouncer` (imported as `debouncer`) can be used anywhere in your project to globally debounce a function based on some arbitrary signature. 
 
 **Basic Usage:**
