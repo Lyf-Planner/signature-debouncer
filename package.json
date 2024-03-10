@@ -1,0 +1,22 @@
+{
+  "name": "signature-debouncer",
+  "version": "1.0.0",
+  "description": "Debounce functions based on a custom signature",
+  "author": "Ethan Husband",
+  "license": "MIT",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "publish": "tsc && npm pack && npm publish",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.25",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.2"
+  },
+  "keywords": []
+}
