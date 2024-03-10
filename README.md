@@ -12,13 +12,13 @@
 
 ```npm install signature-debouncer```
 
-or
+*or*
 
 ```yarn add signature-debouncer```
 
 ## API
 
-`run(func: () => any, signature: Object = {}, duration: number = 1000)`
+`SignatureDebouncer.run(func: () => any, signature: Object = {}, duration: number = 1000)`
 
 Will run `func` after `duration`, unless any calls to `run` with the same `signature` are also made inside this time.
 
@@ -28,45 +28,91 @@ Note: `signature` equality is tested via JSON stringification
 
 ## Usage
 
-The `SignatureDebouncer` can be used anywhere in your project to globally debounce a function based on some arbitrary signature. The signature can be any object, but good examples include the function's parameters, the function name - anything you possibly may want to use to differentiate what function calls are to be debounced independently:
+The `SignatureDebouncer` can be used anywhere in your project to globally debounce a function based on some arbitrary signature. 
 
-Consider the following setup:
+The `signature` can be any object, but good examples include the function's parameters, the function name - anything you possibly may want to use to differentiate what function calls are to be debounced independently.
+
+**Basic Usage:**
 
 ```
 import SignatureDebouncer from 'signature-debouncer';
 
 const someData = [1, 2, 3, 4];
-function exampleFunction = (data) => someData.push(data);
+function examplePushFunction = () => someData.push(data);
+
+SignatureDebouncer.run(() => examplePushFunction(5));
+
+// After 1000ms
+
+console.log(someData)
+
+// [1, 2, 3, 4, 5]
+
 ```
 
-If I want a function to only debounce based on it's argument and name, I could do the following
+**Using the Signature:**
+
+If I wanted a function to only debounce based on a custom signature, for example, that signature could be an object containing it's `name` and `arg`, I could do the following:
 
 ```
+someData = [1,2,3,4];
+
 const arg = 5;
-SignatureDebouncer.run(() => exampleFunction(arg), { funcName: exampleFunction.name, arg });
+const signature = { funcName: exampleFunction.name, arg }
 
-// After 1000ms (default)
+SignatureDebouncer.run(() => exampleFunction(arg), signature);
+
+// After 1000ms
 
 console.log(someData);
 
-// [1, 2, 3, 4, 5]
+// [1,2,3,4,5]
 ```
 
-Now suppose you have some data with ID `1234` being updated from multiple sources in quick succession, but only want to apply the final result after the flurry of updates is over. You could use the signature `{ id: '1234' }` and apply a delay of `5000` ms:
+Then running the same function with a different `signature`, will have them running in parallel, since the debouncer will only debounce for the same signature!
+
 ```
-const updateItemTitle = (title) => console.log("Updated title!");
-const updateItemDate = (date) => console.log("Updated date!");
+someData = [1,2,3,4];
 
-// These calls can come from anywhere in the project...
-SignatureDebouncer.run(() => updateItemTitle(someTitle), { id: '1234' }, 5000); // User A updates at 30ms
-SignatureDebouncer.run(() => updateItemDate(someDate), { id: '1234' }, 5000); // User B updates at 500ms
-SignatureDebouncer.run(() => updateItemTitle(anotherTitle), { id: '1234' }, 5000); // User A updates at 2000ms
-SignatureDebouncer.run(() => updateItemDate(anotherDate), { id: '1234' }, 5000); // User B updates at 5000ms
+const arg = 5;
+const signature = { funcName: exampleFunction.name, arg }
 
-// After 5000ms uninterrupted seconds, the console would show "Updated date!"
+const anotherArg = 6;
+const anotherSignature = { funcName: exampleFunction.name, anotherArg };
+
+SignatureDebouncer.run(() => exampleFunction(arg), signature);
+SignatureDebouncer.run(() => exampleFunction(anotherArg), anotherSignature);
+
+// After 1000ms
+
+console.log(someData);
+
+// [1, 2, 3, 4, 5, 6]
 ```
 
-The `SignatureDebouncer` debounces any function call it wraps, globally, purely based on the signature. For the sake of argument, if you excluded the signature and wrapped every single function in this debouncer, you would globally delay every single function call by 1000ms (probably don't do this lol).
+**Example Case:**
+
+Now for a more realistic use case suppose you have some data with ID `1234` being updated from multiple sources in quick succession, but only want to apply the final result after the flurry of updates is over. You could use the signature `{ id: '1234' }` and apply a delay of `5000` ms:
+```
+const updateItemTitle = (title) => {
+    // .. updating logic
+    console.log("Updated title!");
+}
+const updateItemDate = (date) => {
+    // .. updating logic
+    console.log("Updated date!");
+}
+
+// These calls could come from anywhere in the project...
+SignatureDebouncer.run(() => updateItemTitle(someTitle), { id: '1234' }, 5000);
+SignatureDebouncer.run(() => updateItemDate(someDate), { id: '1234' }, 5000);
+SignatureDebouncer.run(() => updateItemTitle(anotherTitle), { id: '1234' }, 5000);
+SignatureDebouncer.run(() => updateItemDate(anotherDate), { id: '1234' }, 5000);
+
+// After 5000ms uninterrupted seconds, the console would show "Updated date!" - the last invocation under that signature
+```
+
+The `SignatureDebouncer` debounces any function call it wraps, globally, purely based on the signature. 
 
 The point is to extract messy debouncer management when you do want the debouncing condition to be a bit more arbitrary or independent of the place or time a function is called.
 
