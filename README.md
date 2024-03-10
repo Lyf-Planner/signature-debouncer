@@ -1,6 +1,6 @@
 # signature-debouncer
 
-> A global singleton which debounces function invocations on the basis of a custom data signature</p>
+> Debounces function invocations globally on the basis of a custom data signature
 
 <p>
   <a href="https://www.npmjs.com/package/signature-debouncer"><img src="https://img.shields.io/npm/v/signature-debouncer/latest.svg?style=flat-square" alt="NPM version" /> </a>
