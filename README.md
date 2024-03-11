@@ -50,15 +50,15 @@ console.log(someData)
 
 **Using the Signature:**
 
-The `signature` can be any object, but good examples include the function's parameters, the function name - anything you possibly may want to use to differentiate what function calls are to be debounced independently.
+The `signature` can be any object you wish to debounce on the basis on. Good examples include the function's parameters, the function name - anything you possibly may want to use to differentiate what function calls are to be debounced independently.
 
-If I wanted a function to only debounce based on a custom signature, for example, that signature could be an object containing it's `name` and `arg`, I could do the following:
+If I wanted a function to only debounce based on a custom signature, for example, that signature could be an object containing it's `name` and `arg`, I could first do the following to run it as a regular old timeout function:
 
 ```
 someData = [1,2,3,4];
 
 const arg = 5;
-const signature = { funcName: exampleFunction.name, arg }
+const signature = { funcName: exampleFunction.name, arg };
 
 debouncer.run(() => exampleFunction(arg), signature);
 
@@ -69,7 +69,27 @@ console.log(someData);
 // [1,2,3,4,5]
 ```
 
-Then running the same function with a different `signature`, will have them running in parallel, since the debouncer will only debounce for the same signature!
+However if I did `debounce.run` on a different function with the same signature, before the other had timed out, the original function would be debounced and replaced with the new one!
+
+```
+someData = [1,2,3,4];
+
+const arg = 5;
+const anotherArg = 6;
+const signature = { funcName: exampleFunction.name, arg };
+
+debouncer.run(() => exampleFunction(arg), signature);
+debouncer.run(() => exampleFunction(anotherArg), signature);
+
+// After 1000ms
+// The original function call is debounced by the more recent one:
+
+console.log(someData);
+
+// [1, 2, 3, 4, 6]
+```
+
+Alternatively, running the same function with a different `signature`, will have them running in parallel, since the debouncer will only debounce for the same signature!
 
 ```
 someData = [1,2,3,4];
