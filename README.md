@@ -50,7 +50,7 @@ console.log(someData)
 
 **Using the Signature:**
 
-The `signature` can be any object you wish to debounce on the basis on. Good examples include the function's parameters, the function name - anything you possibly may want to use to differentiate what function calls are to be debounced independently.
+The `signature` can be any object you wish to debounce on the basis of. Good examples include the function's parameters, the function name - anything you possibly may want to use to differentiate what function calls are to be debounced independently.
 
 If I wanted a function to only debounce based on a custom signature, for example, that signature could be an object containing it's `name` and `arg`, I could first do the following to run it as a regular old timeout function:
 
