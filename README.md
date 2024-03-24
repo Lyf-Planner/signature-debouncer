@@ -18,13 +18,13 @@
 
 ## API
 
-`debouncer.run(func: () => any, signature: Object = {}, duration: number = 1000)`
+`debouncer.run(func: () => any, signature: any = {}, duration: number = 1000)`
 
 Will run `func` after `duration`, unless any calls to `run` with the same `signature` are also made inside this time.
 
 If the duration has not timed out, and another call with the same `signature` is made, the function timer will reset (debounce) and will now be called after the new `duration` parameter.
 
-Note: `signature` equality is tested via JSON stringification
+Note: `signature` equality is tested via JSON stringification,
 
 ## Usage
 
@@ -110,9 +110,9 @@ console.log(someData);
 // [1, 2, 3, 4, 5, 6]
 ```
 
-**Example Case:**
+## Examples
 
-Now for a more realistic use case suppose you have some data with ID `1234` being updated from multiple sources in quick succession, but only want to apply the final result after the flurry of updates is over. You could use the signature `{ id: '1234' }` and apply a delay of `5000` ms:
+For a more realistic use case, suppose you have some data with ID `1234` being updated from multiple sources in quick succession, but only want to apply the final result after the flurry of updates is over. You could simply use the signature `1234` and apply a delay of `5000` ms:
 ```
 const updateItemTitle = (title) => {
     // .. updating logic
@@ -137,7 +137,52 @@ The `debouncer` debounces any function call it wraps, globally, purely based on 
 
 The point is to extract messy debouncer management when you do want the debouncing condition to be a bit more arbitrary or independent of the place or time a function is called.
 
-For further usage examples, perhaps visit the `tests` directory.
+For further usage examples, visit the `tests` directory.
+
+## Best Practices
+
+The above examples are more so provided for the sake of conveying what this structure does, and are not a good demonstration of what you should do in a production-ready codebase.
+
+The recommended way to apply this package is to store all the signatures used across the app in an indexing object, such that no accidental reuse of a signature occurs where it shouldn't. 
+
+It is advised to have a `signatures.ts` file somewhere containing an indexing object where all your signature definitions live, for example:
+
+```
+// signatures.ts
+
+export const DebounceSignatureIndex = {
+  UseCaseOne: "describe the use case for readers/reviewers",
+  UseCaseTwo: "describe this use case too",
+  ...
+} as const;
+```
+
+Note that if your use case intends to be based on some parameters, it's entirely valid to also store a function in this index:
+
+```
+// signatures.ts
+
+export const DebounceSignatureIndex = {
+  UseCaseOne: "describe the use case for readers/reviewers",
+  UseCaseTwo: "describe this use case too",
+  UseCaseWithArgs: (args) => ({
+    use_case: "description",
+    params: {...args}
+  })
+} as const;
+```
+
+This practice not only prevents the accidental reuse of signatures, but also enables a basic control click lookup of where signatures are being used to evaluate and debug your debouncers across the app.
+
+Then the debouncer can be run succinctly and safely as such:
+
+```
+debouncer.run(myFunc, DebounceSignatureIndex.someDescriptiveSignature);
+```
+
+Strong typing of your indexing constant is advised
+
+This is of course a best practice and highly recommended, but not strictly necessary.
 
 ## Built With
 
