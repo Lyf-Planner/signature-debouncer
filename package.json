@@ -1,6 +1,6 @@
 {
   "name": "signature-debouncer",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Debounce functions based on a custom signature",
   "author": "Ethan Husband",
   "license": "MIT",
